@@ -31,5 +31,5 @@ First release.
 - Errors: `TxRejectedError` / `NonceMismatchError` shared by both transports, `RateLimitedError`,
   `NotSynchronizedError`, `RpcError` family.
 - Vault: PBKDF2-SHA256/250k + AES-256-GCM, cross-SDK fixture.
-- Compat: `@janzeer/sdk/crypto` re-exports the `janzeerCrypto.js` function API.
+- Compat: `@janzeer/sdk/crypto` re-exports the `janzeerCrypto.js` function API; `toPlainNumbers` converts a lossless tree to `JSON.parse` shapes for migrating code.
 - Tested against node 0.0.2 / API 1.1.0 / protocol 3.1.0 / vectors v2.

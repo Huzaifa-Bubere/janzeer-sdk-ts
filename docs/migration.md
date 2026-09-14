@@ -33,6 +33,10 @@ on a non-promise is harmless, so existing call sites keep working).
 | catch `Error(message)` and match text | catch `NonceMismatchError` / `TxRejectedError` |
 | `walletApi.getTransfers(a)` | `client.transfers.list({ address: a })` (typed `Page<TransferTx>`) |
 
+Migrating a large view layer in one go? `client.get(path)` returns the lossless tree; `toPlainNumbers(tree)` turns it
+into exactly what `JSON.parse` gave you (numbers as `number`, lossy beyond 2^53), so views keep working while you
+move them to the typed methods one by one — this is how the Janzeer explorer itself migrated.
+
 Behavioural differences to know about:
 
 - The typed client parses numbers losslessly; balances are strings like `'99996.22'` (they were JS numbers

@@ -261,6 +261,17 @@ export function toPlain(v: JsonValue): unknown {
   if (v && typeof v === 'object') return Object.fromEntries(Object.entries(v).map(([k, x]) => [k, toPlain(x)]));
   return v;
 }
+/**
+ * Convert a parsed tree to what `JSON.parse` would have produced: every number becomes a JS `number` (LOSSY beyond
+ * 2^53 or 15 significant digits). Only for migrating code written against raw `JSON.parse` output; typed code
+ * should use the model mappers.
+ */
+export function toPlainNumbers(v: JsonValue): unknown {
+  if (v instanceof JsonNumber) return Number(v.raw);
+  if (Array.isArray(v)) return v.map(toPlainNumbers);
+  if (v && typeof v === 'object') return Object.fromEntries(Object.entries(v).map(([k, x]) => [k, toPlainNumbers(x)]));
+  return v;
+}
 function describe(v: unknown): string {
   return v === undefined ? 'undefined' : v === null ? 'null' : v instanceof JsonNumber ? `number ${v.raw}` : Array.isArray(v) ? 'array' : typeof v;
 }

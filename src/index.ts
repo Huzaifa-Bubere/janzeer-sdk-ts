@@ -20,7 +20,7 @@ export { bytesToHex, hexToBytes, utf8ToBytes, bytesToBase64, base64ToBytes } fro
 export * from './tx/payloads.js';
 export * from './tx/types.js';
 export * from './tx/builder.js';
-export { JsonNumber, parseJson, toPlain, type JsonValue } from './json.js';
+export { JsonNumber, parseJson, toPlain, toPlainNumbers, type JsonValue } from './json.js';
 export * from './errors.js';
 export { JanzeerClient, type ClientOptions, type Envelope, type TxQuery, type SubmitResult } from './rest/client.js';
 export * from './rest/models.js';
