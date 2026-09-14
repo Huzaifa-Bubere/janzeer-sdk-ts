@@ -1,0 +1,10 @@
+{
+  "entryPoints": ["src/index.ts", "src/compat.ts", "src/rest/index.ts", "src/rpc/index.ts", "src/vault/index.ts"],
+  "out": "docs/api",
+  "name": "@janzeer/sdk",
+  "readme": "README.md",
+  "externalSymbolLinkMappings": { "typescript": { "TypeError": "https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/TypeError", "RangeError": "https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RangeError" } },
+  "excludePrivate": true,
+  "excludeInternal": true,
+  "treatWarningsAsErrors": true
+}

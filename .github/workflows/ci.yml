@@ -1,0 +1,48 @@
+name: ci
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      e2e:
+        description: run the e2e flow against JANZEER_NODE_URL (repository secrets)
+        type: boolean
+        default: false
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [18, 20, 22, 24]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm run check:vectors
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
+      - run: npm run docs
+      - run: npm pack --dry-run
+  e2e:
+    if: github.event_name == 'workflow_dispatch' && inputs.e2e
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run e2e
+        env:
+          JANZEER_NODE_URL: ${{ secrets.JANZEER_NODE_URL }}
+          JANZEER_RPC_URL: ${{ secrets.JANZEER_RPC_URL }}
+          JANZEER_WS_URL: ${{ secrets.JANZEER_WS_URL }}
+          JANZEER_E2E_MNEMONIC: ${{ secrets.JANZEER_E2E_MNEMONIC }}
+          JANZEER_E2E_RECIPIENT: ${{ secrets.JANZEER_E2E_RECIPIENT }}
