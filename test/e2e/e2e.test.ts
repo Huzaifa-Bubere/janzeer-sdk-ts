@@ -21,10 +21,13 @@ describe.skipIf(!NODE_URL)('e2e: SPEC.md flow (TypeScript)', () => {
     const acct = Account.fromMnemonic(MNEMONIC);
     expect(acct.address).toBe('0x06e1c0fa9955a700876f8cb0acc7f13fba9fb8ba');
 
-    // 2 version gate
-    const v = await client.version();
-    expect(v.version).toBe(SPEC_VERSION.node);
+    // 2 version + network gate: every tx below is built for the node's own network id
+    const info = await client.info();
+    expect(info.version).toBe(SPEC_VERSION.node);
     expect(client.lastEnvelope?.version).toBe(SPEC_VERSION.api);
+    const networkId = info.networkId;
+    if (process.env.JANZEER_NETWORK_ID) expect(networkId).toBe(process.env.JANZEER_NETWORK_ID);
+    expect(info.genesisHash).toMatch(/^[0-9a-f]{64}$/);
 
     // 3 account
     const a0 = await rpc.getAccount(acct.address);
@@ -38,7 +41,7 @@ describe.skipIf(!NODE_URL)('e2e: SPEC.md flow (TypeScript)', () => {
     expect(sub.id).toMatch(/^[0-9a-f]{16}$/);
 
     // 5 build + sign
-    const tx = acct.signTx(TxBuilder.transfer({ from: acct.address, to: RECIPIENT, amount: '1.25', fee: '0.01', data: 'sdk-e2e-ts', nonce }));
+    const tx = acct.signTx(TxBuilder.transfer({ from: acct.address, to: RECIPIENT, amount: '1.25', fee: '0.01', data: 'sdk-e2e-ts', nonce, networkId }));
     expect(acct.verify(tx.hash, tx.signature)).toBe(true);
 
     // 6 REST submit (201)
@@ -72,14 +75,14 @@ describe.skipIf(!NODE_URL)('e2e: SPEC.md flow (TypeScript)', () => {
     ws.close();
 
     // 12 nonce gap → NonceMismatchError (REST and RPC)
-    const gap = acct.signTx(TxBuilder.transfer({ from: acct.address, to: RECIPIENT, amount: '1', nonce: nonce + 10 }));
+    const gap = acct.signTx(TxBuilder.transfer({ from: acct.address, to: RECIPIENT, amount: '1', nonce: nonce + 10, networkId }));
     await expect(client.submit(gap)).rejects.toSatisfy((e: any) => e instanceof NonceMismatchError && e.type === 'INVALID_NONCE' && e.got === nonce + 10);
     await expect(rpc.send(gap)).rejects.toSatisfy((e: any) => e instanceof NonceMismatchError && e.rpcCode === -32001);
 
     // 13 bad signature → TxRejectedError INCORRECT_SIGNATURE
     const next = await client.nonce(acct.address);
-    const good = acct.signTx(TxBuilder.transfer({ from: acct.address, to: RECIPIENT, amount: '1', nonce: next }));
-    const forged = TxBuilder.transfer({ from: acct.address, to: RECIPIENT, amount: '2', nonce: next }).withSignature(good.signature, acct.publicKeyHex);
+    const good = acct.signTx(TxBuilder.transfer({ from: acct.address, to: RECIPIENT, amount: '1', nonce: next, networkId }));
+    const forged = TxBuilder.transfer({ from: acct.address, to: RECIPIENT, amount: '2', nonce: next, networkId }).withSignature(good.signature, acct.publicKeyHex);
     await expect(client.submit(forged)).rejects.toSatisfy((e: any) => e instanceof TxRejectedError && e.type === 'INCORRECT_SIGNATURE');
 
     // 14 bad address → -32602

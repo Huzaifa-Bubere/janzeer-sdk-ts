@@ -26,11 +26,11 @@ export const TOKEN_CREATE_FEE = '5';
 /** The node / API / wire-protocol versions this SDK release was built and tested against. */
 export const SPEC_VERSION = Object.freeze({
   /** `GET info/version` → `version` */
-  node: '0.0.2',
+  node: '0.0.3',
   /** REST envelope `version` and JSON-RPC `apiVersion` */
   api: '1.1.0',
   /** peer-to-peer wire protocol (informational) */
-  protocol: '3.1.0',
+  protocol: '3.2.0',
   /** conformance vectors format consumed by this SDK's tests */
   vectors: 2,
 });

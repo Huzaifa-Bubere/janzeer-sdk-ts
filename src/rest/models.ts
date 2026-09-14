@@ -4,7 +4,7 @@
  * @module
  */
 import { asArray, asBigInt, asBool, asDecimal, asInt, asObject, asOptDecimal, asOptInt, asOptString, asString, isObject, type JsonValue } from '../json.js';
-import { TOKEN_OP_NAMES, type TokenOpName } from '../constants.js';
+import { NETWORK_ID, TOKEN_OP_NAMES, type TokenOpName } from '../constants.js';
 
 export interface Page<T> {
   total: number;
@@ -26,6 +26,22 @@ export interface NodeInfo {
   nodeKey: string;
   host: string;
   port: number;
+  /** `consensus.network-id` — pass it as `networkId` to every builder when talking to a non-mainnet node. */
+  networkId: string;
+  /** Hash of the epoch-1 genesis block: the chain's identity. */
+  genesisHash: string;
+  /** Consensus rule-set + genesis digest exchanged in the P2P handshake. */
+  chainSpecDigest: string;
+  /** Node software version. */
+  version: string;
+  /** REST/JSON-RPC API version. */
+  apiVersion: string;
+  /** P2P wire protocol version. */
+  protocolVersion: string;
+  /** `SYNCHRONIZED`, `PROCESSING` or `NOT_SYNCHRONIZED`. */
+  syncStatus: string;
+  /** True when the node runs a testnet faucet (`POST /api/v1/faucet`). */
+  faucet: boolean;
 }
 export interface NodeVersion {
   version: string;
@@ -152,7 +168,20 @@ export function mapPage<T>(v: JsonValue | undefined, item: (x: JsonValue) => T):
 }
 export const mapNodeInfo = (v: JsonValue): NodeInfo => {
   const o = asObject(v);
-  return { nodeKey: asString(o.nodeKey, 'nodeKey'), host: asString(o.host), port: asInt(o.port) };
+  return {
+    nodeKey: asString(o.nodeKey, 'nodeKey'),
+    host: asString(o.host),
+    port: asInt(o.port),
+    // fields added by node 0.0.3 — tolerate an older node
+    networkId: o.networkId === undefined ? NETWORK_ID : asString(o.networkId),
+    genesisHash: o.genesisHash === undefined ? '' : asString(o.genesisHash),
+    chainSpecDigest: o.chainSpecDigest === undefined ? '' : asString(o.chainSpecDigest),
+    version: o.version === undefined ? '' : asString(o.version),
+    apiVersion: o.apiVersion === undefined ? '' : asString(o.apiVersion),
+    protocolVersion: o.protocolVersion === undefined ? '' : asString(o.protocolVersion),
+    syncStatus: o.syncStatus === undefined ? '' : asString(o.syncStatus),
+    faucet: o.faucet === true,
+  };
 };
 export const mapNodeVersion = (v: JsonValue): NodeVersion => {
   const o = asObject(v);

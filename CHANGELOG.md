@@ -14,6 +14,14 @@ Each release states the node / API / protocol versions it was tested against (`S
 
 ## [Unreleased]
 
+## [0.1.1] — 2026-09-14
+
+### Added
+- `NodeInfo` (REST `info()`) now carries `networkId`, `genesisHash`, `chainSpecDigest`, `version`, `apiVersion`, `protocolVersion`, `syncStatus` and `faucet` (node 0.0.3); older nodes are tolerated (defaults). Read `info().networkId` and pass it as `networkId` to the builders to work on the public testnet (`janzeer-testnet`).
+
+### Changed
+- `SPEC_VERSION`: node `0.0.3`, protocol `3.2.0`.
+
 ## [0.1.0] — 2026-09-14
 
 First release.
