@@ -3,6 +3,10 @@
 All notable changes to `@janzeer/sdk` are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [SemVer](https://semver.org/).
 
+## Unreleased
+
+- Verified against node **0.1.0** (P2P protocol 3.4.0): `SPEC_VERSION.node` bumped from 0.0.3. No API change for SDK users. New node rule worth knowing: a transaction's `timestamp` must be within 60 s ahead / 6 h behind the node's clock — sign right before you send.
+
 ## Versioning policy
 
 - **MAJOR** — a change in the signed preimage, hashing, derivation or the REST envelope that makes older
