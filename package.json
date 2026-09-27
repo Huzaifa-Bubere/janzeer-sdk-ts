@@ -4,7 +4,7 @@
   "description": "Official TypeScript SDK for the Janzeer blockchain: wallet keys and signing, transaction builders, typed REST client, JSON-RPC over HTTP and WebSocket subscriptions.",
   "license": "Apache-2.0",
   "homepage": "https://janzeer.org",
-  "repository": { "type": "git", "url": "https://github.com/janzeer/janzeer-sdk-ts.git" },
+  "repository": { "type": "git", "url": "https://github.com/janzeerorg/janzeer-sdk-ts.git" },
   "keywords": ["janzeer", "blockchain", "sdk", "wallet", "secp256k1", "json-rpc"],
   "type": "module",
   "sideEffects": false,
