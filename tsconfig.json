@@ -12,6 +12,8 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "types": ["node"],
+    "baseUrl": ".",
+    "paths": { "@janzeer/sdk": ["./src/index.ts"], "@janzeer/sdk/*": ["./src/*"] },
     "noEmit": true
   },
   "include": ["src", "test", "examples"]
