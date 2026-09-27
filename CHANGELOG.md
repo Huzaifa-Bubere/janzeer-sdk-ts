@@ -5,6 +5,11 @@ All notable changes to `@janzeer/sdk` are documented here. The format follows
 
 ## Unreleased
 
+- Minimum Node.js is now **20**: Node 18 is end-of-life and has no global WebCrypto, which the vault (random salt and IV) needs.
+- `npm run typecheck` no longer needs a build first (the examples resolve `@janzeer/sdk` to the sources).
+
+## Unreleased
+
 - Verified against node **0.1.0** (P2P protocol 3.4.0): `SPEC_VERSION.node` bumped from 0.0.3. No API change for SDK users. New node rule worth knowing: a transaction's `timestamp` must be within 60 s ahead / 6 h behind the node's clock — sign right before you send.
 
 ## Versioning policy

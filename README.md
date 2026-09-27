@@ -54,7 +54,7 @@ Subpath exports: `@janzeer/sdk` (everything), `@janzeer/sdk/rest`, `@janzeer/sdk
 
 ## Platforms
 
-- **Node.js ≥ 18** (global `fetch`). WebSocket: Node ≥ 22 has a global `WebSocket`; on 18–21 pass the
+- **Node.js ≥ 20** (global `fetch` and WebCrypto). WebSocket: Node ≥ 22 has a global `WebSocket`; on 20–21 pass the
   [`ws`](https://www.npmjs.com/package/ws) package: `JanzeerRpcWs.connect(url, { WebSocket })`.
 - **Browsers** (evergreen): works from plain-http pages too — the crypto is pure JS (`@noble/*`), nothing
   depends on `crypto.subtle`. Nodes answer CORS `*`.
