@@ -12,6 +12,14 @@ verifies.
 npm install @janzeer/sdk
 ```
 
+> **Not on npm yet.** The registry package follows shortly after the mainnet launch. Until then, install from source:
+>
+> ```bash
+> git clone https://github.com/janzeerorg/janzeer-sdk-ts && cd janzeer-sdk-ts
+> npm ci && npm run build
+> cd /path/to/your-project && npm install /path/to/janzeer-sdk-ts
+> ```
+
 ## 60-second quickstart
 
 ```ts
