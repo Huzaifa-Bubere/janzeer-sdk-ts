@@ -7,6 +7,7 @@ sends anything else.
 ```ts
 const rpc = new JanzeerRpc('http://localhost:7019');            // '/rpc' appended automatically
 await rpc.getInfo();          // chainId, versions, tip, syncStatus, peers, finality: 'instant'
+await rpc.getGenesis();        // typed genesis block (epoch index and validator count)
 await rpc.getChainSpec();     // consensus parameters, fees, deposit, max supply
 await rpc.getStats(); await rpc.getEpoch();
 await rpc.getAccount(addr); await rpc.getBalance(addr); await rpc.getNonce(addr);
