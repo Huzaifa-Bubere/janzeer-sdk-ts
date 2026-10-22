@@ -9,6 +9,7 @@ describe('JanzeerRpc (HTTP)', () => {
     const body = JSON.parse(String(init.body));
     const one = (r: any) => {
       switch (r.method) {
+        case 'janzeer_getGenesis': return { jsonrpc: '2.0', id: r.id, result: { timestamp: 1, height: 0, previousHash: '', hash: 'genesis-hash', signature: 'sig', publicKey: 'pub', epochIndex: 1, validatorsCount: 3 } };
         case 'janzeer_getNonce': return { jsonrpc: '2.0', id: r.id, result: 7 };
         case 'janzeer_getBalance': return r.params.address === '0x12' ? { jsonrpc: '2.0', id: r.id, error: { code: -32602, message: "Invalid address '0x12'" } } : { jsonrpc: '2.0', id: r.id, result: 1000.00000001 };
         case 'janzeer_getTransactionByHash': return { jsonrpc: '2.0', id: r.id, result: { hash: r.params.hash, type: null, status: 'UNKNOWN' } };
@@ -25,6 +26,7 @@ describe('JanzeerRpc (HTTP)', () => {
     const rpc = new JanzeerRpc('http://node:7019/api/v1', { fetch });
     expect(rpc.url).toBe('http://node:7019/rpc');
     expect(await rpc.getNonce('0xa')).toBe(7);
+    expect(await rpc.getGenesis()).toEqual({ timestamp: 1, height: 0, previousHash: '', hash: 'genesis-hash', signature: 'sig', publicKey: 'pub', epochIndex: 1, validatorsCount: 3 });
     expect(await rpc.getBalance('0xa')).toBe('1000.00000001');
     await expect(rpc.getBalance('0x12')).rejects.toBeInstanceOf(RpcInvalidParamsError);
     await expect(rpc.getToken('x')).rejects.toBeInstanceOf(RpcNotFoundError);
